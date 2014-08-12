@@ -15,6 +15,11 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    self.xcodeItemsController.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"displayName"
+                                                                                ascending:NO],
+                                                  [NSSortDescriptor sortDescriptorWithKey:@"version"
+                                                                                ascending:NO],];
+    
     [self reload];
     
     [self.window center];
@@ -48,8 +53,9 @@
         NSString *selectedXcodePath = [XcodeHelper selectedXcodePath];
         if (! [selectedXcodePath isEqualToString:item.xcodeDeveloperPath]) {
             BOOL result = [XcodeHelper selectXcodeDeveloperDirectoryPath:item.xcodeDeveloperPath];
-            (void)result;
-            [self reload];
+            if (result) {
+                [self reload];
+            }
         }
     }
 }
@@ -62,6 +68,7 @@
     __block BOOL currentSelectedXcodeNotFound = YES;
     
     [self.xcodeItemsController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self.xcodeItemsController.arrangedObjects count])]];
+    __block XcodeItem *selectedItem = nil;
     
     [[XcodeHelper xcodeApplicationPathsExceptOtherVolumes:YES] enumerateObjectsUsingBlock:
      ^(NSString *xcodeApplicationPath, NSUInteger idx, BOOL *stop) {
@@ -73,7 +80,7 @@
          
          if (isSelected) {
              currentSelectedXcodeNotFound = NO;
-             [self.xcodeItemsController setSelectedObjects:@[item]];
+             selectedItem = item;
          }
      }];
     
@@ -83,6 +90,9 @@
         [self.xcodeItemsController addObject:item];
         [self.xcodeItemsController setSelectedObjects:@[item]];
     }
+    
+    [self.xcodeItemsController rearrangeObjects];
+    [self.xcodeItemsController setSelectedObjects:@[selectedItem]];
 }
 
 @end
