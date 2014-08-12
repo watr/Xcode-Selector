@@ -84,7 +84,7 @@
                                                  arguments:@[@"-s", developerDirectoryPath]];
     BOOL succeeded = ({
         NSString *selectedXcodePath = [XcodeHelper selectedXcodePath];
-        ([developerDirectoryPath isEqualToString:[XcodeHelper xcodeDeveloperDirectoryPathCreateWithApplicationPath:selectedXcodePath]]);
+        ([developerDirectoryPath isEqualToString:selectedXcodePath]);
     });
     return succeeded;
 }
