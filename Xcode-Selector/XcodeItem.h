@@ -3,6 +3,10 @@
 
 @interface XcodeItem : NSObject
 
+@property (nonatomic, copy) NSString *displayName;
+
+@property (nonatomic, copy) NSNumber *version;
+
 @property (nonatomic, copy) NSString *title;
 
 @property (nonatomic, strong) NSImage *image;

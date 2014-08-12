@@ -2,6 +2,25 @@
 #import "XcodeItem.h"
 #import "XcodeHelper.h"
 
+@interface NSBundle (InfoDictionary)
+
+- (NSNumber *)version;
+
+@end
+
+
+@implementation NSBundle (InfoDictionary)
+
+- (NSNumber *)version;
+{
+    NSBundle *bundle = self;
+    NSDictionary *info = [bundle infoDictionary];
+    NSNumber *versionNumber = [info objectForKey:@"CFBundleVersion"];
+    return versionNumber;
+}
+
+@end
+
 @interface XcodeItem ()
 
 + (NSImage *)imageWithXcodePath:(NSString *)path;
@@ -19,6 +38,8 @@
 {
     self = [super init];
     if (self) {
+        self.displayName = [[NSFileManager defaultManager] displayNameAtPath:path];
+        self.version = [[NSBundle bundleWithPath:path] version];
         self.title = [XcodeHelper xcodeTitleWithApplicationPath:path];
         self.image = [[self class] imageWithXcodePath:path];
         self.xcodeDeveloperPath  = [XcodeHelper xcodeDeveloperDirectoryPathCreateWithApplicationPath:path];
