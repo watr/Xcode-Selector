@@ -88,9 +88,10 @@
         XcodeItem *item = [XcodeItem itemWithXcodeApplicationPath:selectedXcodePath];
         item.selected = YES;
         [self.xcodeItemsController addObject:item];
-        [self.xcodeItemsController setSelectedObjects:@[item]];
+        selectedItem = item;
     }
     
+    NSAssert(selectedItem != nil, @"selected item is nil");
     [self.xcodeItemsController rearrangeObjects];
     [self.xcodeItemsController setSelectedObjects:@[selectedItem]];
 }
